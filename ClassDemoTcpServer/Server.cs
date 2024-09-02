@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ClassDemoTcpServer
 {
-    internal class Server
+    public class Server
     {
         private const int PORT = 7;
 
@@ -20,6 +21,16 @@ namespace ClassDemoTcpServer
 
             // venter på en klient 
             TcpClient socket = server.AcceptTcpClient();
+            
+            DoOneClient(socket);
+            
+            server.Stop();
+        }
+
+        private void DoOneClient(TcpClient socket)
+        {
+            Console.WriteLine($"Min egen (IP, port) = {socket.Client.LocalEndPoint}");
+            Console.WriteLine($"Accepteret client (IP, port) = {socket.Client.RemoteEndPoint}");
 
 
             // åbner for tekst strenge
@@ -29,11 +40,18 @@ namespace ClassDemoTcpServer
             // læser linje fra nettet
             string l = sr.ReadLine();
 
+
+            // hvis tælle ord
+            string[] strings = l.Split();
+            int antalord = strings.Length;
+
             Console.WriteLine("Modtaget: " + l);
-            // skriver linje tilbage
+            // skriver linje tilbage - stadig ekko
             sw.WriteLine(l);
             sw.Flush();
 
+            sr?.Close();
+            sw?.Close();
         }
     }
 }
