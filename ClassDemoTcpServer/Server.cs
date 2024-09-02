@@ -19,11 +19,13 @@ namespace ClassDemoTcpServer
             server.Start();
             Console.WriteLine("Server startet på port " + PORT);
 
-            // venter på en klient 
-            TcpClient socket = server.AcceptTcpClient();
-            
-            DoOneClient(socket);
-            
+            while (true)
+            {
+                // venter på en klient 
+                TcpClient socket = server.AcceptTcpClient();
+
+                DoOneClient(socket);
+            }
             server.Stop();
         }
 
