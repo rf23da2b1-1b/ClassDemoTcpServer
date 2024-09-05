@@ -24,9 +24,16 @@ namespace ClassDemoTcpServer
                 // venter på en klient 
                 TcpClient socket = server.AcceptTcpClient();
 
-                DoOneClient(socket);
+                Task.Run(
+                    () =>
+                    {
+                        TcpClient tempsocket = socket;
+                        DoOneClient(tempsocket);
+                    }
+                    );
+                
             }
-            server.Stop();
+            //server.Stop();
         }
 
         private void DoOneClient(TcpClient socket)
